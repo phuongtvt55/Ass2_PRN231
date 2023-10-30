@@ -1,0 +1,15 @@
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\BusinessObject.GeneratedMSBuildEditorConfig.editorconfig
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\BusinessObject.AssemblyInfoInputs.cache
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\BusinessObject.AssemblyInfo.cs
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\BusinessObject.csproj.CoreCompileInputs.cache
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\bin\Debug\net5.0\BusinessObject.deps.json
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\bin\Debug\net5.0\BusinessObject.runtimeconfig.json
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\bin\Debug\net5.0\BusinessObject.runtimeconfig.dev.json
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\bin\Debug\net5.0\BusinessObject.dll
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\bin\Debug\net5.0\BusinessObject.pdb
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\BusinessObject.csproj.AssemblyReference.cache
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\BusinessObject.dll
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\refint\BusinessObject.dll
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\BusinessObject.pdb
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\BusinessObject.genruntimeconfig.cache
+D:\PRN231_PE_PhuongHHCE161062\Assigment02Solution_PhuongHHCE161062\BusinessObject\obj\Debug\net5.0\ref\BusinessObject.dll

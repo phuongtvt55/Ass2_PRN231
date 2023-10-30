@@ -1,0 +1,328 @@
+﻿<h4 class="text text-danger">@TempData["errorMessage"]</h4>
+@if(User.IsInRole("Admin")){
+    <input id="role" value="Admin" type="hidden"/>
+}else{
+    <input id="role" value="User" type="hidden"/>
+}
+<div class="container">  
+        <h2>Product Record</h2>
+    @if (User.IsInRole("Admin"))
+    {
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="clearTextBox();">Add New Product</button>
+        <br />
+        <br />
+    }
+    <table class="table table-bordered table-hover">  
+            <thead>  
+                <tr>  
+                    <th>  
+                        Product Name  
+                    </th>  
+                    <th>  
+                        Weight  
+                    </th>  
+                    <th>  
+                        Unit Price  
+                    </th>
+                    <th>
+                        Units In Stock
+                    </th>
+                    <th>  
+                        CategoryName  
+                    </th>  
+                    <th>  
+                        Action  
+                    </th>  
+                </tr>  
+            </thead>  
+            <tbody class="tbody">  
+  
+            </tbody>  
+        </table>  
+    </div>  
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">  
+        <div class="modal-dialog">  
+            <div class="modal-content">  
+                <div class="modal-header">  
+                    <button type="button" class="close" data-dismiss="modal">×</button>  
+                </div>  
+                <div class="modal-body">  
+                    <form>  
+                        <div class="form-group">  
+                            <label for="ProductID">ID</label>  
+                            <input type="text" class="form-control" id="ProductID" placeholder="Id" disabled="disabled"/>  
+                        </div>  
+                        <div class="form-group">  
+                            <label for="ProductName">Name</label>  
+                            <input type="text" class="form-control" id="Name" placeholder="Name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="Weight">Weight</label>
+                            <input type="text" class="form-control" id="Weight" placeholder="Weight" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Price">Unit Price</label>
+                            <input type="text" class="form-control" id="Price" placeholder="Unit Price" />
+                        </div>
+                        <div class="form-group">
+                        <label for="UnitsInStock">UnitsInStock</label>
+                            <input type="text" class="form-control" id="UnitsInStock" placeholder="UnitsInStock" />  
+                        </div>  
+                        
+                        <div class="form-group">                            
+                            <label for="CategoryName">CategoryName</label>
+                            <select class="dropdownCate form-control" id="CateName">
+                            </select>                              
+                        </div>  
+                    </form>  
+                </div>  
+                <div class="modal-footer">  
+                    <button type="button" class="btn btn-primary" id="btnAdd" onclick="return Add();">Add</button>  
+                    <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" onclick="Update();">Update</button>  
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
+                </div>  
+            </div>  
+        </div>          
+    </div>  
+
+    <style>
+        .img-fit{
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+
+@section Scripts{
+    <script type="text/javascript">
+        //Load Data in Table when documents is ready
+        $(document).ready(function () {
+            loadData();
+            loadCate();
+        });
+
+        //Load Data function
+        function loadData() {
+            var role = $('#role').val();
+            $.ajax({
+                url: "https://localhost:44307/api/ProductAPI",
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result, function (key, item) {
+                        console.log(role);
+                        html += '<tr>';
+                        html += '<td>' + item.productName + '</td>';
+                        html += '<td>' + item.weight + '</td>';
+                        html += '<td>' + item.unitPrice + '</td>';
+                        html += '<td>' + item.unitslnStock + '</td>';
+                        html += '<td>' + item.category.categoryName + '</td>';
+                        if (role == "Admin") {
+                            html += '<td><a href="#" onclick="return getbyID(' + item.productId + ')"><img class="img-fit" src="img/changes.png"/></a>  <a href="#" onclick="Delele(' + item.productId + ')"><img class="img-fit" src="img/delete.png"/></a></td>';
+                        } else {
+                            html += '<td><a href="Orders/AddToCart/' + item.productId + '" class="btn btn-sm text-dark p-0 ml-4"><i class="fas fa-shopping-cart text-primary mr-1"></i></a></td>'
+                        }
+                        html += '</tr>';
+                    });
+                    $('.tbody').html(html);
+                    
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+        function loadCate() {
+            $.ajax({
+                url: "https://localhost:44307/api/ProductAPI/GetCategory",
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    var count = 0;
+                    $.each(result, function (key, item) {
+                        html += '<option value=' + item.categoryId + '>' + item.categoryName + '</option>';
+                    });
+                    $('.dropdownCate').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+        //Add Data Function
+        function Add() {
+            var res = validate();
+            if (res == false) {
+                return false;
+            }
+            var proObj = {
+                //ProductID: $('#ProductID').val(),
+                productName: $('#Name').val(),
+                Weight: $('#Weight').val(),
+                UnitslnStock: $('#UnitsInStock').val(),
+                UnitPrice: $('#Price').val(),
+                CategoryId: $('#CateName').val(),
+            };
+            $.ajax({
+                url: "https://localhost:44307/api/ProductAPI",
+                data: JSON.stringify(proObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {    
+                    loadData();
+                    $('#myModal').modal('hide');
+                    
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+        //Function for getting the Data Based upon Employee ID
+        function getbyID(proID) {
+            //console.log(proID);
+            $('#Name').css('border-color', 'lightgrey');
+            $('#Weight').css('border-color', 'lightgrey');
+            $('#UnitsInStock').css('border-color', 'lightgrey');
+            $('#Price').css('border-color', 'lightgrey');
+            $('#CateName').css('border-color', 'lightgrey');
+            $.ajax({
+                url: "https://localhost:44307/api/ProductAPI/" + proID,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    $('#ProductID').val(result.productId);
+                    $('#Name').val(result.productName);
+                    $('#Weight').val(result.weight);
+                    $('#UnitsInStock').val(result.unitslnStock);
+                    $('#Price').val(result.unitPrice);
+                    $('#CateName').val(result.category.categoryId);
+
+                    $('#myModal').modal('show');
+                   
+                    $('#btnUpdate').show();
+                    $('#btnAdd').hide();
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+
+        //function for updating employee's record
+        function Update() {
+            var res = validate();
+            if (res == false) {
+                return false;
+            }
+            var proObj = {
+                ProductID: $('#ProductID').val(),
+                productName: $('#Name').val(),
+                Weight: $('#Weight').val(),
+                UnitslnStock: $('#UnitsInStock').val(),
+                UnitPrice: $('#Price').val(),
+                CategoryId: $('#CateName').val(),
+            };
+            //console.log(proObj);
+            $.ajax({
+                url: "https://localhost:44307/api/ProductAPI/" + proObj.ProductID,
+                data: JSON.stringify(proObj),
+                type: "PUT",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    loadData();
+                    $('#myModal').modal('hide');
+                    $('#ProductID').val("");
+                    $('#Name').val("");
+                    $('#Weight').val("");
+                    $('#UnitsInStock').val("");
+                    $('#Price').val("");
+                   
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+        //function for deleting employee's record
+        function Delele(ID) {
+            var ans = confirm("Are you sure you want to delete this Record?");
+            if (ans) {
+                $.ajax({
+                    url: "https://localhost:44307/api/ProductAPI/" + ID,
+                    type: "DELETE",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        //Function for clearing the textboxes
+        function clearTextBox() {
+            $('#ProductID').val("");
+            $('#Name').val("");
+            $('#UnitsInStock').val("");
+            $('#Weight').val("");
+            $('#Price').val("");
+            //$('#CateName').val("");
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+            $('#Name').css('border-color', 'lightgrey');
+            $('#UnitsInStock').css('border-color', 'lightgrey');
+            $('#Price').css('border-color', 'lightgrey');
+            $('#CateName').css('border-color', 'lightgrey');
+        }
+        //Valdidation using jquery
+        function validate() {
+            var isValid = true;
+            if ($('#Name').val().trim() == "") {
+                $('#Name').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#Name').css('border-color', 'lightgrey');
+            }
+            if ($('#Weight').val().trim() == "") {
+                $('#Weight').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#Weight').css('border-color', 'lightgrey');
+            }
+            if ($('#UnitsInStock').val().trim() == "") {
+                $('#UnitsInStock').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#UnitsInStock').css('border-color', 'lightgrey');
+            }
+            if ($('#Price').val().trim() == "") {
+                $('#Price').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#Price').css('border-color', 'lightgrey');
+            }
+           
+            return isValid;
+        }
+    </script>
+}

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<BusinessObject.OrderDetail>
+
+@{
+    ViewData["Title"] = "ViewOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ViewOrder</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.RequiredDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.ShippedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.Freight)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.OrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.RequiredDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.ShippedDate)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Order.Freight)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

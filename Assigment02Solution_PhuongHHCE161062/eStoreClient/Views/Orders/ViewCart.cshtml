@@ -1,0 +1,114 @@
+﻿@model IEnumerable<BusinessObject.OrderDetail>
+
+@{
+    ViewData["Title"] = "AddToCard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>AddToCart</h1>
+<h4 class="text-danger">@TempData["errorMessage"]</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Product
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Discount
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product.ProductName)
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("Update_Quantity_Cart", "Orders"))
+                        {
+                            <div class="input-group quantity" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-dark btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="status" value="cart">
+                                <input type="hidden" value="@item.ProductId" name="proId">
+                                <input type="text" class="form-control form-control-sm bg-secondary text-center input-quantity-cart"
+                                       name="quantity" quan="@item.Product.UnitslnStock" value="@item.Quantity" style="color: white;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-dark btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Discount)
+                    </td>
+                    <td>
+                        $@(
+                           item.Quantity * item.Product.UnitPrice
+                           )
+                    </td>
+                    <td class="align-middle">
+                        <a asp-controller="Orders" asp-action="Remove" asp-route-id="@item.ProductId">
+                            <button class="btn btn-sm btn-danger">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div>Total: $@(ViewBag.TotalPrice)</div>
+<form asp-action="Checkout">
+    <span>Required Date: (Not include shipped date) </span><input type="date" name="requiredDate" value=""/>
+    <button type="submit" class="btn btn-success">Checkout</button>
+</form>
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            var newVal = 1;
+
+            $('.quantity button').on('click', function () {
+                //console.log(quantity);
+                var button = $(this);
+                var oldValue = button.parent().parent().find('.input-quantity-cart').val();
+                var quantity = button.parent().parent().find('.input-quantity-cart').attr("quan");
+                if (button.hasClass('btn-plus')) {
+                    newVal = parseFloat(oldValue) + 1;
+                    if (newVal > quantity) {
+                        alert("Maximum is " + quantity);
+                        newVal = quantity;
+                    }
+
+                } else {
+                    if (oldValue > 1) {
+                        newVal = parseFloat(oldValue) - 1;
+                    } else {
+                        newVal = 1;
+                    }
+                }
+                button.parent().parent().find('.input-quantity-cart').val(newVal);
+                //$('.input-quantity').val(newVal);
+            });
+        });
+    </script>
+}
